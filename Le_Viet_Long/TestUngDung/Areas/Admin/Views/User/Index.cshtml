@@ -1,0 +1,68 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model PagedList.IPagedList<ModelEF.Model.UserAccount>
+@{
+    ViewBag.Title = "Hiển thị người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section header{
+    <i class="fa fa-user"></i>&nbsp;Quản lý người dùng
+}
+
+@using (Html.BeginForm("Index", "User", FormMethod.Post))
+{
+    
+    @Html.AntiForgeryToken()
+    <div class="col-lg-12 form-group" style="margin-top:10px">
+        <div class="col-md-6">
+            @Html.ActionLink("Tạo mới", "Create", "User", new { @class = "btn btn-danger" })
+        </div>
+        <div class="col-md-4">
+            <input style="color:black" type="text" value="@ViewBag.SearchString" name="searchString"
+                   placeholder="Nhập từ khóa cần tìm kiếm" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Tìm kiếm" class="btn btn-default" />
+        </div>
+    </div>
+}
+<div class="col-lg-12 form-group" style="margin-top:15px">
+
+    <table class="table">
+        <tr>
+            <th>STT</th>
+            <th>Tên đăng nhập</th>
+            <th>Mật khẩu</th>
+            <th>Trạng thái</th>
+            <th>Xóa</th>
+        </tr>
+        @{ var i = 1;}
+        @foreach (var item in Model)
+        {
+            <tr id="row_@item.ID">
+                <td> @i </td>
+                <td> @item.UserName </td>
+                <td> @item.Password </td>
+                <td> @(item.Status.Equals(true)?"Active":"Blocked" )</td>
+                <td>
+                    <a href="~/Admin/User/index/@item.UserName"><i class="fa fa-trash-o"></i></a>
+                    &nbsp;
+                    @Ajax.ActionLink("Xoá", "Delete", new { @id = item.ID }, new AjaxOptions
+                   {
+                    Confirm = "Bạn có muốn xoá " + @item.UserName + "?",
+                    OnComplete = "$('#row_" + @item.ID + "').remove()",
+                    HttpMethod = "Delete"
+                     }, new { @class = "myActionLink" })
+                    <script>
+                        $('.myActionLink').prepend("<i class='fa fa-trash'></i>");
+                    </script>
+                </td>
+            </tr>
+            i++;
+        }
+    </table>
+    <div class="col text-center">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",
+        new { page, @searchString = @ViewBag.SearchString }))
+        </div>
+    </div>

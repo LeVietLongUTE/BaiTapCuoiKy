@@ -1,0 +1,53 @@
+﻿@model TestUngDung.Areas.Admin.Model.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+!
+<html lang="en">
+<head>
+    <!--Core CSS -->
+    <link href="~/Assets/Admin/bs3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Assets/Admin/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="~/Assets/Admin/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/Assets/Admin/css/style.css" rel="stylesheet">
+    <link href="~/Assets/Admin/css/style-responsive.css" rel="stylesheet" />
+    <title>Trang Đăng Nhập</title>
+</head>
+<body class="login-body">
+    <div class="container">
+        <div class="form-signin">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, null, new { @class = "alert alert-danger" })
+
+                <h2 class="form-signin-heading">Đăng Nhập</h2>
+                <div class="login-wrap">
+                    <div class="user-login-info">
+                        @Html.TextBoxFor(model => model.username,
+              new { @class = "form-control", @placeholder = "Mời nhập tên tài khoản", @autofocus = "autofocus" })
+                        @Html.TextBoxFor(model => model.password,
+              new { @class = "form-control", @placeholder = "Mời nhập mật khẩu", @type = "password" })
+
+                    </div>
+                    <label class="checkbox">
+                        <input type="checkbox" value="remember-me"> Remember me
+                        <span class="pull-right">
+                            <a data-toggle="modal" href="#myModal"> Quên Password</a>
+                        </span>
+                    </label>
+                    <button class="btn btn-lg btn-login btn-block" type="submit">Đăng Nhập</button>
+                    <div class="registration">
+                        Don't have an account yet?
+                        <a class="" href="registration.html"> Đăng Kí </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="~/Assets/Admin/js/jquery.js"></script>
+    <script src="~/Assets/Admin/bs3/js/bootstrap.min.js"></script>
+</body>
+</html>

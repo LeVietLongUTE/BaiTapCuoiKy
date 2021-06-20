@@ -1,0 +1,55 @@
+﻿@model PagedList.IPagedList<ModelEF.Model.SanPham>
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section header{
+    <div style="display: block">
+        <div><i class="fa fa-book"></i>&nbsp;Hiển thị Danh sách sản phẩm </div>
+    </div>
+}
+@using (Html.BeginForm("Index", "DanhSachSP", FormMethod.Post))
+{
+    <div class="col-lg-12 form-group" style="margin-top:10px">
+        <div class="col-md-2">
+            @Html.ActionLink("Thêm Sản Phẩm", "Create", "DanhSachSP", 
+           new { @class = "btn btn-danger" })
+        </div>
+    </div>
+}
+<div class="col-lg-12 form-group" style="margin-top:15px">
+
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Tên Sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số Lượng</th>
+            <th>LoaiSP_ID</th>
+            <th>Thao tác</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr style="margin-top:15px" id="row_@item.ID">
+                <td> @item.ID </td>
+                <td> @item.Name </td>
+                <td> @item.UnitCost </td>
+                <td> @item.Quantity </td>
+                <td> @item.categoryID </td>
+                <td>
+                    <a href="~/Admin/DanhSachSP/detail?idSanPham=@item.ID">
+                        <b class="text-info">xem chi tiết</b>
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="col text-center">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",
+        new { page, @searchString = @ViewBag.SearchString }))
+    </div>
+</div>
+
